@@ -34,10 +34,12 @@ const Register = props => {
     }).then(function(res) {
       var resdata = res.headers;
       localStorage.setItem("x-auth", resdata["x-auth"]);
-      console.log(res.data.email);
       setUser(res.data.email);
-    });
-    props.history.push("/");
+    }).catch(e => {
+      console.log(e);
+    }).then( ()=>{
+      props.history.push("/");
+    })
   };
 
   return (

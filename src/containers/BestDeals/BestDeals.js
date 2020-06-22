@@ -1,47 +1,51 @@
-import React, {useState, useEffect}from 'react';
-import Cards from '../../components/Cards/Cards';
-import {getJwt} from "../../helpers/jwt.js";
+import React, { useState, useEffect } from "react";
+import Cards from "../../components/Cards/Cards";
+import { getJwt } from "../../helpers/jwt.js";
+import Axios from "axios";
 
 const BestDeals = (props) => {
-    const [deals, setDeals] = useState([]);
-  
-    useEffect( ()=>{
-     const jwt = getJwt();
-     console.log(jwt)
-     if (!jwt) {
-         fetch('http://localhost:3001/api/v1/deals',{
-             method: "GET",
-             headers: {
-               "access-control-allow-origin" : "*",
-               "Content-type": "application/json; charset=UTF-8"
-             }})
-           .then(res => res.json())
-           .then(dealsJson => setDeals(dealsJson)).catch((err)=>{
-               console.log(err)
-           });
-          
-     }else{
-         fetch('http://localhost:3001/api/v1/deals/user',{
-             method: "GET",
-             headers: {
-               "access-control-allow-origin" : "*",
-               "x-auth": jwt
-             }})
-           .then(res => res.json())
-           .then(dealsJson => setDeals(dealsJson)).catch((err)=>{
-               console.log(err)
-           })
-     }
- 
-    }, []);
- 
-    
-        return(
-            <div className="page">
-                <Cards deals={deals}/>
-            </div>
-        )
+  const [deals, setDeals] = useState([]);
 
-}
+  useEffect(() => {
+    const jwt = getJwt();
+    console.log(jwt);
+    if (!jwt) {
+      const config = {
+        headers: {
+          "access-control-allow-origin": "*",
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      };
+      Axios.get("http://localhost:3001/api/v1/deals")
+        .then((dealsJson) => {
+          setDeals(dealsJson.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log(deals);
+        });
+    } else {
+      const config = {
+        headers: {
+          "access-control-allow-origin": "*",
+          "x-auth": jwt,
+        },
+      };
+      Axios.get("http://localhost:3001/api/v1/deals/user", config)
+        .then((dealsJson) => {
+          setDeals(dealsJson.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+
+  return (
+    <div className="page">
+      <Cards deals={deals} />
+    </div>
+  );
+};
 
 export default BestDeals;

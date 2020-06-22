@@ -1,18 +1,28 @@
 import React, { useState } from "react";
 import Aux from "../../hoc/Aux";
 import Axios from "axios";
-import {getJwt} from '../../helpers/jwt';
-import {withRouter} from 'react-router-dom';
-import 'react-notifications/lib/notifications.css';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { getJwt } from "../../helpers/jwt";
+import { withRouter } from "react-router-dom";
+import "react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
+import { css } from "@emotion/core";
+import { BarLoader } from "react-spinners";
+import img from "../../assets/img.png";
 
 const NewDeal = props => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [oldPrice, setOldPrice] = useState("");
+  const [link, setLink] = useState("");
   const [image, setImage] = useState(null);
-
+  const [imageName, setImageName] = useState("Upload image")
+  const [fileError, setFileError] = useState(false);
+  const [fileErrorMssg, setFileErrorMssg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const updateTitle = e => {
     setTitle(e.target.value);
@@ -26,69 +36,136 @@ const NewDeal = props => {
   const updateOldPrice = e => {
     setOldPrice(e.target.value);
   };
-  const updateImage = e =>{
-    setImage(e.target.files[0]);
+  const updateLink = e => {
+    setLink(e.target.value);
   };
-  
-  const submit = async (e) => {
+
+  const updateImage = e => {
+    if (maxSelectFile(e) && checkMimeType(e) && checkFileSize(e)) {
+      setImage(e.target.files[0]);
+      setImageName(e.target.files[0].name);
+    }
+  };
+
+  const checkFileSize = event => {
+    let files = event.target.files;
+    let size = 1500000;
+    let err = "";
+    for (var x = 0; x < files.length; x++) {
+      if (files[x].size > size) {
+        err +=
+          files[x].type + "is too large, please pick a smaller file <1,5MB";
+      }
+    }
+    if (err !== "") {
+      event.target.value = null;
+      setFileError(true);
+      setFileErrorMssg(err);
+      console.log(err);
+      return false;
+    }
+    setFileError(false);
+    return true;
+  };
+
+  const checkMimeType = event => {
+    let files = event.target.files;
+    let err = "";
+    const types = ["image/png", "image/jpeg", "image/gif"];
+    for (var x = 0; x < files.length; x++) {
+      if (types.every(type => files[x].type !== type)) {
+        err += files[x].type + " is not a supported format.";
+      }
+    }
+    if (err !== "") {
+      event.target.value = null;
+      setFileError(true);
+      setFileErrorMssg(`${err} Only supported formats: .jpg, .png, .gif`);
+      return false;
+    }
+    setFileError(false);
+    return true;
+  };
+
+  const maxSelectFile = event => {
+    let files = event.target.files;
+    if (files.length > 1) {
+      event.target.value = null;
+      setFileError(true);
+      setFileErrorMssg("Too many files. Please upload only one image.");
+      return false;
+    }
+    setFileError(false);
+    return true;
+  };
+  const override = css`
+    display: block;
+    margin-left:15px;
+    margin-top:50px;
+    border-color: red;
+  `;
+  const submit = async e => {
     e.preventDefault();
+    setIsLoading(true);
     const jwt = getJwt();
-    if(!jwt){
-        this.props.history.push('/login');
+    if (!jwt) {
+      this.props.history.push("/login");
     }
     const formdata = new FormData();
-    const reqData = {
-      title: title,
-      description: description,
-      price: price,
-      oldPrice: oldPrice,
+
+    formdata.append("title", title);
+    formdata.append("description", description);
+    formdata.append("price", price);
+    formdata.append("oldPrice", oldPrice);
+    formdata.append("url", link)
+    formdata.append("image", image);
+
+    const config = {
+      headers: {
+        "x-auth": jwt
+      }
     };
-    formdata.append('title', title);
-    formdata.append('description', description);
-    formdata.append('price', price);
-    formdata.append('oldPrice', oldPrice);
-    formdata.append('image', image);
 
-    // const reqDataJson = JSON.stringify(reqData)
-
-    Axios.post('http://localhost:3001/api/v1/deals', formdata,  {
-      headers:{
-        'x-auth': jwt
-      }
-    }).then((res)=>{
-      if(res.status==200){
-        NotificationManager.success('Success', 'New deal has been added successfully');
-   
-        setTitle('');
-        setDescription('');
-        setPrice('');
-        setOldPrice('');
-        setImage(null)
-        setTimeout(function(){ 
-          props.history.push("/");
-         }, 2000);
-      }
-      else{
-        NotificationManager.warning('Warning', 'Failed to add new deal', 3000);
-      }
-      
-  }).catch((err)=>{
-    NotificationManager.warning('Warning', 'Failed to add new deal', 3000);
-    console.log(err);
-  })
-    
+    Axios.post("http://localhost:3001/api/v1/deals", formdata, config)
+      .then(res => {
+        if (res.status == 200) {
+          NotificationManager.success(
+            "Success",
+            "New deal has been added successfully"
+          );
+          setTitle("");
+          setDescription("");
+          setPrice("");
+          setOldPrice("");
+          setLink("");
+          setImage(null);
+          setIsLoading(false);
+          setTimeout(function() {
+            props.history.push("/");
+          }, 1500);
+        } else {
+          NotificationManager.warning(
+            "Warning",
+            "Failed to add new deal",
+            3000
+          );
+        }
+      })
+      .catch(err => {
+        NotificationManager.warning("Warning", "Failed to add new deal", 3000);
+        console.log(err);
+      });
   };
 
   return (
-    
     <Aux>
       <div className="container page padding-t-60">
         <div className="row">
           <div className="col-md-6 add-deal-form">
             <form
-            onSubmit={e => {
-              submit(e);
-            }}
+              onSubmit={e => {
+                submit(e);
+              }}
             >
               <h3>Add new deal</h3>
               <div className="form-input-wrapper">
@@ -98,11 +175,12 @@ const NewDeal = props => {
                   minLength="12"
                   type="text"
                   name="link"
+                  disabled={isLoading}
                   placeholder="Paste your link here..."
-                  // onChange={e => {
-                  //   updateEmail(e);
-                  // }}
-                  // value={email}
+                  onChange={e => {
+                    updateLink(e);
+                  }}
+                  value={link}
                 ></input>
                 <div className="form-input-details">
                   <h4>Details</h4>
@@ -113,6 +191,7 @@ const NewDeal = props => {
                     type="text"
                     name="title"
                     placeholder="Write your title"
+                    disabled={isLoading}
                     onChange={e => {
                       updateTitle(e);
                     }}
@@ -124,6 +203,7 @@ const NewDeal = props => {
                     required
                     type="text"
                     name="description"
+                    disabled={isLoading}
                     placeholder="Write short description about deal..."
                     onChange={e => {
                       updateDescription(e);
@@ -138,9 +218,10 @@ const NewDeal = props => {
                         className="form-input-price"
                         required
                         minLength="1"
-                        type="text"
+                        type="number"
                         name="title"
-                        placeholder="Write your title"
+                        disabled={isLoading}
+                        placeholder="Current price"
                         onChange={e => {
                           updatePrice(e);
                         }}
@@ -153,38 +234,60 @@ const NewDeal = props => {
                         className="form-input-price"
                         required
                         minLength="1"
-                        type="text"
+                        type="number"
                         name="title"
-                        placeholder="Write your title"
+                        disabled={isLoading}
+                        placeholder="Previous price"
                         onChange={e => {
                           updateOldPrice(e);
                         }}
                         value={oldPrice}
                       ></input>
                     </div>
-                    <input type="file" name="file" className="input-file" onChange={e => {
-                      updateImage(e);
-                    }}/>
-                    <button type="submit" className="form-button">Add deal</button>
+                    <div className="input-file-wrapper">
+                      <input
+                        type="file"
+                        name="file"
+                        id="file"
+                        className="input-file"
+                        disabled={isLoading}
+                        placeholder="Select image"
+                        onChange={e => {
+                          updateImage(e);
+                        }}
+                      />
+                      <label for="file">
+                      <img src={img}/>
+                      <span>{imageName}</span>
+                      </label>
+                      {fileError ? (
+                        <p className="file-error-mssg">{fileErrorMssg}</p>
+                      ) : (
+                        <p></p>
+                      )}
+                    </div>
+                    { isLoading? <BarLoader
+                      css={override}
+                      sizeUnit={"px"}
+                      height={6}
+                      width={100}
+                      color={"#ff441b"}
+                      loading={isLoading}
+                    />:
+                     <button submit="form" className="form-button">
+                      Add deal
+                    </button>}
                   </div>
                 </div>
               </div>
             </form>
           </div>
-          <div className="col-md-6">sfds</div>
+          <div className="col-md-6"></div>
         </div>
       </div>
-      <NotificationContainer/>
+      <NotificationContainer />
     </Aux>
   );
 };
-
-// {
-// 	"title": "Laptop 300gb karta HD",
-// 	"description": "to jest super sprzet. Bierz go juz i tyle man",
-// 	"price": "3999 zł",
-// 	"oldPrice": "5000 zł",
-// 	"image": "http://localhost:3001/img/1.jpg"
-// }
 
 export default withRouter(NewDeal);

@@ -19,11 +19,6 @@ class App extends Component{
     super(props);
  
   }
- 
-
-  componentDidMount(){
-  
-  }
 
   
   
@@ -38,11 +33,11 @@ class App extends Component{
             <TransitionGroup>
             <CSSTransition
             key={location.key}
-            timeout={300}
+            timeout={200}
             classNames="fade">
               <Switch location={location}>
                 <Route path="/" exact component={BestDeals}/>
-                <Route path="/login" exact component={Login} /> }/>
+                <Route path="/login" exact component={Login} />
                 <Route path="/signup" exact component={Register}/>
                 <Route path="/item/:id" exact component={ItemDetails}/>
                 <AuthenticatedComponent>

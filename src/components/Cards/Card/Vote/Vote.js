@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import { getJwt } from "../../../../helpers/jwt";
 import {withRouter} from 'react-router-dom';
 import Aux from '../../../../hoc/Aux';
 
 const Vote = props => {
-  const parsed = JSON.parse(props.item.deal.vote)
+  const parsed = JSON.parse(props.item.vote)
   const [backButton, setBackButton] = useState(parsed);
 
   const addVote = (vote) => {
@@ -13,7 +13,7 @@ const Vote = props => {
     if (!jwt) {
      props.history.push("/login");
     }
-    Axios.patch(`http://localhost:3001/api/v1/deals/${props.item.deal._id}/vote`, {"vote": vote},
+    Axios.patch(`http://localhost:3001/api/v1/deals/${props.item._id}/vote`, {"vote": vote},
       {
         headers:{
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const Vote = props => {
       this.props.history.push("/login");
     }
     Axios.patch(
-      `http://localhost:3001/api/v1/deals/${props.item.deal._id}/removevote`, null,
+      `http://localhost:3001/api/v1/deals/${props.item._id}/removevote`, null,
       {
         headers: {
           "Content-Type": "application/json",
