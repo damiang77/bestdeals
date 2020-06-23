@@ -27,7 +27,7 @@ const Register = props => {
   };
   const submit = e => {
     e.preventDefault();
-    Axios.post("http://localhost:3001/api/v1/users/register", {
+    Axios.post("https://gar.ovh/bd/api/v1/users/register", {
       login: login,
       email: email,
       password: password

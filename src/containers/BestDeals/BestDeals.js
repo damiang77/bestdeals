@@ -16,7 +16,7 @@ const BestDeals = (props) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       };
-      Axios.get("http://localhost:3001/api/v1/deals")
+      Axios.get("https://gar.ovh/bd/api/v1/deals")
         .then((dealsJson) => {
           setDeals(dealsJson.data);
         })
@@ -31,7 +31,7 @@ const BestDeals = (props) => {
           "x-auth": jwt,
         },
       };
-      Axios.get("http://localhost:3001/api/v1/deals/user", config)
+      Axios.get("https://gar.ovh/bd/api/v1/deals/user", config)
         .then((dealsJson) => {
           setDeals(dealsJson.data);
         })

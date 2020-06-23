@@ -13,7 +13,7 @@ const Vote = props => {
     if (!jwt) {
      props.history.push("/login");
     }
-    Axios.patch(`http://localhost:3001/api/v1/deals/${props.item._id}/vote`, {"vote": vote},
+    Axios.patch(`https://gar.ovh/bd/api/v1/deals/${props.item._id}/vote`, {"vote": vote},
       {
         headers:{
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const Vote = props => {
       this.props.history.push("/login");
     }
     Axios.patch(
-      `http://localhost:3001/api/v1/deals/${props.item._id}/removevote`, null,
+      `https://gar.ovh/bd/api/v1/deals/${props.item._id}/removevote`, null,
       {
         headers: {
           "Content-Type": "application/json",

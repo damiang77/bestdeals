@@ -126,7 +126,7 @@ const NewDeal = props => {
       }
     };
 
-    Axios.post("http://localhost:3001/api/v1/deals", formdata, config)
+    Axios.post("https://gar.ovh/bd/api/v1/deals", formdata, config)
       .then(res => {
         if (res.status == 200) {
           NotificationManager.success(
