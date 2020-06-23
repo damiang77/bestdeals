@@ -13,7 +13,3 @@ const PercentLabel = props => {
 };
 
 export default PercentLabel;
-
-
-// 700 100
-// 500 x
