@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import  Layout from './components/Layout/Layout';
-import {getJwt} from './helpers/jwt';
-import axios from 'axios';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import NewDeal from './components/NewDeal/NewDeal';
 import BestDeals from './containers/BestDeals/BestDeals';
@@ -13,6 +11,7 @@ import AuthenticatedComponent from './components/AuthenticatedComponent/Authenti
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import {AppProvider} from './containers/AppContext/AppContext';
 import {UserProvider} from './containers/AppContext/UserContext';
+import Footer from './components/Footer/Footer';
 
 class App extends Component{
   constructor(props){
@@ -47,10 +46,12 @@ class App extends Component{
             </CSSTransition>
             </TransitionGroup>
           )}/>
+                 <Footer/>
           </BrowserRouter>
       </div>
       </AppProvider>
       </UserProvider>
+      
   );
  }
 }

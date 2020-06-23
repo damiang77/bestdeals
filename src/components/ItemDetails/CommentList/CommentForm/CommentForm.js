@@ -33,6 +33,8 @@ export default class CommentForm extends Component {
     });
   };
 
+ 
+
   /**
    * Form submit handler
    */
@@ -92,9 +94,15 @@ export default class CommentForm extends Component {
   }
 
   render() {
+    var formStyle = {
+      width: "500px",
+      marginLeft: "15px"
+    }
+
+
     return (
       <React.Fragment>
-        <form method="post" onSubmit={this.onSubmit}>
+        <form style={formStyle} method="post" onSubmit={this.onSubmit}>
           <div className="form-group">
             <input
               onChange={this.handleFieldChange}

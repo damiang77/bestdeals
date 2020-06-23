@@ -24,5 +24,3 @@ const Comment = (props) =>{
 }
 
 export default Comment;
-
-// `https://api.adorable.io/avatars/48/${author.toLowerCase()}@adorable.io.png`

@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import Aux from "../../../hoc/Aux";
-import "./Card.css";
 import CardButton from "./Button/Button";
 import { Link } from "react-router-dom";
 import Vote from "./Vote/Vote";
