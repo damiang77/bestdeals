@@ -3,8 +3,8 @@ import React, { Fragment } from "react";
 const PercentLabel = props => {
 
     function Percentage(price, oldPrice){
-      var priceNum = parseFloat(price.replace(',', '.'));
-      var oldPriceNum = parseFloat(oldPrice.replace(',', '.'));
+      var priceNum = parseFloat(price);
+      var oldPriceNum = parseFloat(oldPrice);
        return 100 - (((priceNum * 100)/ oldPriceNum).toFixed())
     }
   return (
