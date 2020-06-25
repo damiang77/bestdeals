@@ -19,7 +19,7 @@ function ItemDetails({ match }) {
   }, []);
 
   function fetchData() {
-    Axios.get(`http://localhost:3001/api/v1/deals/${match.params.id}`).then(
+    Axios.get(`https://gar.ovh/bd/api/v1/deals/${match.params.id}`).then(
       (fetchItem) => {
         setItem(fetchItem.data);
       }
