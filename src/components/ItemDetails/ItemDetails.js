@@ -14,6 +14,7 @@ function ItemDetails({ match }) {
   const [user, setUser] = useContext(UserContext);
 
   useEffect(() => {
+    window.scrollTo(0, 0)
     fetchData();
   }, []);
 

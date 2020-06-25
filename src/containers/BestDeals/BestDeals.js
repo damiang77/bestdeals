@@ -7,6 +7,7 @@ const BestDeals = (props) => {
   const [deals, setDeals] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const jwt = getJwt();
     console.log(jwt);
     if (!jwt) {
