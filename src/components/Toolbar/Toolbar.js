@@ -15,7 +15,7 @@ const Toolbar = props => {
   const getLogin = () => {
     const jwt = getJwt();
     if (jwt) {
-      axios.get("http://localhost:3001/api/v1/users/me", {
+      axios.get("https://gar.ovh/bd/api/v1/users/me", {
           headers: { "x-auth": `${jwt}` }
         })
         .then(res => {
@@ -31,7 +31,7 @@ const Toolbar = props => {
     const jwt = getJwt();
     if (jwt) {
       axios
-        .delete("http://localhost:3001/api/v1/users/logout", {
+        .delete("https://gar.ovh/bd/api/v1/users/logout", {
           headers: { "x-auth": `${jwt}` }
         })
         .then(res => {
