@@ -14,7 +14,7 @@ class AuthenticatedComponent extends Component {
             this.props.history.push('/login');
         }
 
-        axios.get('http://localhost:3001/api/v1/users/me',  {
+        axios.get('https://gar.ovh/bd/api/v1/users/me',  {
             headers:{
               'Content-Type': 'application/json',
               'x-auth': jwt
