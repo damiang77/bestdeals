@@ -10,9 +10,10 @@ import CommentList from "./CommentList/CommentList";
 import CommentForm from "./CommentList/CommentForm/CommentForm";
 import {url} from "../../helpers/constants";
 
-function ItemDetails({ match }) {
+const ItemDetails = ({ match }) => {
   const [item, setItem] = useState({});
   const [user, setUser] = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -20,11 +21,15 @@ function ItemDetails({ match }) {
   }, []);
 
   function fetchData() {
+  //setinterval used for visual experience of loading spinner | not for use in real app
+  setInterval(()=>{
     Axios.get(`${url.API_URL}/deals/${match.params.id}`).then(
       (fetchItem) => {
+        setIsLoading(false);
         setItem(fetchItem.data);
       }
     );
+  }, 600)
   }
 
   const style = {
@@ -68,7 +73,9 @@ function ItemDetails({ match }) {
   };
   return (
     <Aux>
+ { isLoading ? <div className="loader"></div> : 
       <div className="container" style={style}>
+      
         <div className="row">
           <div className="col-xl-4 image-detail-wrapper">
             <img src={item.image} />
@@ -113,7 +120,7 @@ function ItemDetails({ match }) {
         <div className="row">
           <CommentForm />
         </div>
-      </div>
+      </div>}
     </Aux>
   );
 }
