@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {getJwt} from '../../helpers/jwt';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
+import {url} from "../../helpers/constants";
 
 class AuthenticatedComponent extends Component {
     state = {
@@ -14,7 +15,7 @@ class AuthenticatedComponent extends Component {
             this.props.history.push('/login');
         }
 
-        axios.get('https://gar.ovh/bd/api/v1/users/me',  {
+        axios.get(`${url.API_URL}/users/me`,  {
             headers:{
               'Content-Type': 'application/json',
               'x-auth': jwt

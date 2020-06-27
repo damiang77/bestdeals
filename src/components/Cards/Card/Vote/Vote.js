@@ -3,6 +3,7 @@ import Axios from "axios";
 import { getJwt } from "../../../../helpers/jwt";
 import {withRouter} from 'react-router-dom';
 import Aux from '../../../../hoc/Aux';
+import {url} from "../../../../helpers/constants"
 
 const Vote = props => {
   const parsed = JSON.parse(props.item.vote)
@@ -13,7 +14,7 @@ const Vote = props => {
     if (!jwt) {
      props.history.push("/login");
     }
-    Axios.patch(`https://gar.ovh/bd/api/v1/deals/${props.item._id}/vote`, {"vote": vote},
+    Axios.patch(`${url.API_URL}/deals/${props.item._id}/vote`, {"vote": vote},
       {
         headers:{
           'Content-Type': 'application/json',
@@ -36,7 +37,7 @@ const Vote = props => {
       this.props.history.push("/login");
     }
     Axios.patch(
-      `https://gar.ovh/bd/api/v1/deals/${props.item._id}/removevote`, null,
+      `${url.API_URL}/deals/${props.item._id}/removevote`, null,
       {
         headers: {
           "Content-Type": "application/json",

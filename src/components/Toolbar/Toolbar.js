@@ -5,6 +5,7 @@ import { UserContext } from "../../containers/AppContext/UserContext";
 import { getJwt } from "../../helpers/jwt";
 import axios from "axios";
 import Logo from "../../assets/Logo.png";
+import {url} from "../../helpers/constants";
 
 const Toolbar = props => {
   const [user, setUser] = useContext(UserContext);
@@ -15,7 +16,7 @@ const Toolbar = props => {
   const getLogin = () => {
     const jwt = getJwt();
     if (jwt) {
-      axios.get("https://gar.ovh/bd/api/v1/users/me", {
+      axios.get(`${url.API_URL}/users/me`, {
           headers: { "x-auth": `${jwt}` }
         })
         .then(res => {
@@ -31,7 +32,7 @@ const Toolbar = props => {
     const jwt = getJwt();
     if (jwt) {
       axios
-        .delete("https://gar.ovh/bd/api/v1/users/logout", {
+        .delete(`${url.API_URL}/users/logout`, {
           headers: { "x-auth": `${jwt}` }
         })
         .then(res => {

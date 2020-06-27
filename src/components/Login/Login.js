@@ -7,6 +7,7 @@ import mailImg from "../../assets/envelope.png";
 import padlockImg from "../../assets/padlock.png";
 import { Link } from "react-router-dom";
 import {withRouter} from 'react-router-dom';
+import {url} from "../../helpers/constants";
 
 const Login = props => {
   const [email, setEmail] = useState("");
@@ -23,7 +24,7 @@ const Login = props => {
   };
   const submit = (e) => {
     e.preventDefault();
-      Axios.post("https://gar.ovh/bd/api/v1/users/login", {
+      Axios.post(`${url.API_URL}/users/login`, {
       email: email,
       password: password
     }).then(function(res) {

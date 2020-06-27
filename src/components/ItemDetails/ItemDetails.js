@@ -8,6 +8,7 @@ import LinkSvg from "../../assets/link.svg";
 import PercentLabel from "./PercentLabel/PercentLabel";
 import CommentList from "./CommentList/CommentList";
 import CommentForm from "./CommentList/CommentForm/CommentForm";
+import {url} from "../../helpers/constants";
 
 function ItemDetails({ match }) {
   const [item, setItem] = useState({});
@@ -19,7 +20,7 @@ function ItemDetails({ match }) {
   }, []);
 
   function fetchData() {
-    Axios.get(`https://gar.ovh/bd/api/v1/deals/${match.params.id}`).then(
+    Axios.get(`${url.API_URL}/deals/${match.params.id}`).then(
       (fetchItem) => {
         setItem(fetchItem.data);
       }

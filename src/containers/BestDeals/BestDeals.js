@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Cards from "../../components/Cards/Cards";
 import { getJwt } from "../../helpers/jwt.js";
+import {url} from "../../helpers/constants";
+
 import Axios from "axios";
 
 const BestDeals = (props) => {
@@ -17,7 +19,7 @@ const BestDeals = (props) => {
           "Content-type": "application/json; charset=UTF-8",
         },
       };
-      Axios.get("https://gar.ovh/bd/api/v1/deals")
+      Axios.get(`${url.API_URL}/deals`)
         .then((dealsJson) => {
           setDeals(dealsJson.data);
         })
@@ -32,7 +34,7 @@ const BestDeals = (props) => {
           "x-auth": jwt,
         },
       };
-      Axios.get("https://gar.ovh/bd/api/v1/deals/user", config)
+      Axios.get(`${url.API_URL}/deals/user`, config)
         .then((dealsJson) => {
           setDeals(dealsJson.data);
         })

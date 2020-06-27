@@ -5,7 +5,8 @@ import { UserContext } from "../../containers/AppContext/UserContext";
 import formImg from "../../assets/login-form.png";
 import mailImg from "../../assets/envelope.png";
 import padlockImg from "../../assets/padlock.png";
-import userImg from "../../assets/user.png"
+import userImg from "../../assets/user.png";
+import {url} from "../../helpers/constants";
 
 const Register = props => {
 
@@ -27,7 +28,7 @@ const Register = props => {
   };
   const submit = e => {
     e.preventDefault();
-    Axios.post("https://gar.ovh/bd/api/v1/users/register", {
+    Axios.post(`${url.API_URL}/users/register`, {
       login: login,
       email: email,
       password: password

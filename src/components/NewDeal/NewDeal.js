@@ -11,6 +11,7 @@ import {
 import { css } from "@emotion/core";
 import { BarLoader } from "react-spinners";
 import img from "../../assets/img.png";
+import {url} from "../../helpers/constants";
 
 const NewDeal = props => {
   const [title, setTitle] = useState("");
@@ -126,7 +127,7 @@ const NewDeal = props => {
       }
     };
 
-    Axios.post("https://gar.ovh/bd/api/v1/deals", formdata, config)
+    Axios.post(`${url.API_URL}/deals`, formdata, config)
       .then(res => {
         if (res.status == 200) {
           NotificationManager.success(
@@ -142,7 +143,7 @@ const NewDeal = props => {
           setIsLoading(false);
           setTimeout(function() {
             props.history.push("/");
-          }, 1500);
+          }, 500);
         } else {
           NotificationManager.warning(
             "Warning",
