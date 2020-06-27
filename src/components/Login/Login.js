@@ -40,7 +40,7 @@ const Login = props => {
       <div className="form-container">
         <div className="container">
           <div className="row">
-            <div className="col-xl-6 center-center form-box">
+            <div className="col-xl-6 d-none d-md-block center-center form-box">
               <img src={formImg} />
             </div>
             <div className="col-xl-6 center-center form-box">
