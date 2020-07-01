@@ -12,6 +12,7 @@ import {url} from "../../helpers/constants";
 const Login = props => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   const [user, setUser] = useContext(UserContext);
   const [deals, setDeals] = useContext(AppContext);
 
@@ -23,6 +24,7 @@ const Login = props => {
     setPassword(e.target.value);
   };
   const submit = (e) => {
+    setError(false);
     e.preventDefault();
       Axios.post(`${url.API_URL}/users/login`, {
       email: email,
@@ -32,7 +34,10 @@ const Login = props => {
       localStorage.setItem("x-auth", resdata["x-auth"]);
       setUser(res.data.email);
       props.history.push("/");
-      }).catch((err)=> console.log(err));
+      }).catch((err)=> {
+        console.log(err)
+        setError(true);
+      });
   };
 
   return (
@@ -78,6 +83,7 @@ const Login = props => {
                     value={password}
                   />
                 </div>
+               { error ? <p className="error-login">You have entered an invalid username or password</p> : ""}
                 <button type="submit">Sign in</button>
                 <p>
                   Don't have account? <Link to="/signup">Sing up</Link>

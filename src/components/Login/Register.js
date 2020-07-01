@@ -12,6 +12,7 @@ const Register = props => {
 
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState(false);
   const [password, setPassword] = useState("");
   const [user, setUser] = useContext(UserContext);
 
@@ -27,6 +28,7 @@ const Register = props => {
     setPassword(e.target.value);
   };
   const submit = e => {
+    setError(false);
     e.preventDefault();
     Axios.post(`${url.API_URL}/users/register`, {
       login: login,
@@ -38,6 +40,7 @@ const Register = props => {
       setUser(res.data.email);
     }).catch(e => {
       console.log(e);
+      setError(true);
     }).then( ()=>{
       props.history.push("/");
     })
@@ -100,6 +103,7 @@ const Register = props => {
                   value={password}
                 />
                 </div>
+                { error ? <p className="error-login">Something went wrong</p> : ""}
                 <button type="submit">Sign up</button>
               </form>
             </div>
