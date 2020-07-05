@@ -17,13 +17,17 @@ const NewDeal = props => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [priceError, setPriceError] = useState(false);
   const [oldPrice, setOldPrice] = useState("");
+  const [oldPriceError, setOldPriceError] = useState(false);
   const [link, setLink] = useState("");
+  const [linkError, setLinkError]= useState(false);
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState("Upload image")
   const [fileError, setFileError] = useState(false);
   const [fileErrorMssg, setFileErrorMssg] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState(false);
 
   const updateTitle = e => {
     setTitle(e.target.value);
@@ -31,8 +35,9 @@ const NewDeal = props => {
   const updateDescription = e => {
     setDescription(e.target.value);
   };
-  const updatePrice = e => {
-    setPrice(e.target.value);
+  const updatePrice = (e) =>{
+     setPrice(e.target.value);
+   
   };
   const updateOldPrice = e => {
     setOldPrice(e.target.value);
@@ -48,6 +53,25 @@ const NewDeal = props => {
     }
   };
 
+  /*
+const isFormValid = () =>{
+  const isValid = true;
+
+  if(link.indexOf("https://") === -1){
+    setLinkError(true);
+    isValid = false;
+  }
+  if(price.indexOf(",") >= 0){
+    setPriceError(true)
+    isValid = false;
+  }
+  if(oldPrice.indexOf(",") >= 0){
+    setOldPriceError(true)
+    isValid = false;
+  }
+  return isValid;
+}
+*/
   const checkFileSize = event => {
     let files = event.target.files;
     let size = 1500000;
@@ -106,6 +130,12 @@ const NewDeal = props => {
     border-color: red;
   `;
   const submit = async e => {
+   /* const isValid = isFormValid();
+
+    if(isValid !== true){
+      return false;
+    }*/
+
     e.preventDefault();
     setIsLoading(true);
     const jwt = getJwt();
@@ -160,7 +190,7 @@ const NewDeal = props => {
 
   return (
     <Aux>
-      <div className="container page padding-t-60">
+      <div className="container page padding-t-100 new-deal">
         <div className="row">
           <div className="col-md-6 add-deal-form">
             <form
@@ -173,16 +203,18 @@ const NewDeal = props => {
                 <h4>Link</h4>
                 <input
                   required
-                  minLength="12"
-                  type="text"
+                  minLength="8"
+                  type="url"
+                  pattern="https://.*"
                   name="link"
                   disabled={isLoading}
-                  placeholder="Paste your link here..."
+                  placeholder="https://..."
                   onChange={e => {
                     updateLink(e);
                   }}
                   value={link}
                 ></input>
+                {linkError ? <p className="error-new-deal">Link is not valid</p> : ""}
                 <div className="form-input-details">
                   <h4>Details</h4>
                   <h5>Title</h5>
@@ -203,6 +235,7 @@ const NewDeal = props => {
                     rows="4"
                     required
                     type="text"
+                    minLength="100"
                     name="description"
                     disabled={isLoading}
                     placeholder="Write short description about deal..."
@@ -220,14 +253,17 @@ const NewDeal = props => {
                         required
                         minLength="1"
                         type="number"
+                        step="any"
                         name="title"
                         disabled={isLoading}
+                        value={price}
                         placeholder="Current price"
                         onChange={e => {
                           updatePrice(e);
                         }}
                         value={price}
                       ></input>
+                        {priceError ? <p className="error-new-deal">Invalid pattern. Use 0,00</p> : ""}
                     </div>
                     <div className="col-sm-6">
                       <h5>Regular price</h5>
@@ -244,9 +280,11 @@ const NewDeal = props => {
                         }}
                         value={oldPrice}
                       ></input>
+                        {oldPriceError ? <p className="error-new-deal">Invalid pattern. Use 0,00</p> : ""}
                     </div>
                     <div className="input-file-wrapper">
                       <input
+                        required
                         type="file"
                         name="file"
                         id="file"
@@ -275,7 +313,7 @@ const NewDeal = props => {
                       color={"#ff441b"}
                       loading={isLoading}
                     />:
-                     <button submit="form" className="form-button">
+                     <button submit="form" disabled={formError} className="form-button">
                       Add deal
                     </button>}
                   </div>

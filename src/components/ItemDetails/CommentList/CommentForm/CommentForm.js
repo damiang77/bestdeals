@@ -1,4 +1,12 @@
 import React, { Component } from "react";
+import {url} from "../../../../helpers/constants";
+import {getJwt} from "../../../../helpers/jwt";
+import Axios from "axios";
+import "react-notifications/lib/notifications.css";
+import {
+  NotificationContainer,
+  NotificationManager
+} from "react-notifications";
 
 export default class CommentForm extends Component {
   constructor(props) {
@@ -8,7 +16,6 @@ export default class CommentForm extends Component {
       error: "",
 
       comment: {
-        name: "",
         message: ""
       }
     };
@@ -42,41 +49,43 @@ export default class CommentForm extends Component {
     // prevent default form submission
     e.preventDefault();
 
-    if (!this.isFormValid()) {
-      this.setState({ error: "All fields are required." });
-      return;
-    }
-
     // loading status and clear error
     this.setState({ error: "", loading: true });
 
-    // persist the comments on server
-    let { comment } = this.state;
-    fetch("http://localhost:7777", {
-      method: "post",
-      body: JSON.stringify(comment)
-    })
-      .then(res => res.json())
-      .then(res => {
-        if (res.error) {
-          this.setState({ loading: false, error: res.error });
-        } else {
-          // add time return from api and push comment to parent state
-          comment.time = res.time;
-          this.props.addComment(comment);
+    const jwt = getJwt();
+    if (!jwt) {
+      this.props.history.push("/login");
+    }
 
-          // clear the message box
-          this.setState({
-            loading: false,
-            comment: { ...comment, message: "" }
-          });
+    const config = {
+      headers: {
+        "x-auth": jwt
+      }
+    };
+
+    var commentjson = {
+      "comment": this.state.comment.message
+    }
+
+    Axios.post(`${url.API_URL}/deals/${this.props.itemId}/comment`, commentjson, config)
+      .then(res => {
+        if (res.status == 200) {
+          NotificationManager.success(
+            "Success",
+            "New comment added"
+          );
+       
+        } else {
+          NotificationManager.warning(
+            "Warning",
+            "Failed to add new comment",
+            3000
+          );
         }
       })
       .catch(err => {
-        this.setState({
-          error: "Something went wrong while submitting form.",
-          loading: false
-        });
+        NotificationManager.warning("Warning", "Failed to add new comment", 3000);
+        console.log(err);
       });
   }
 
@@ -103,16 +112,6 @@ export default class CommentForm extends Component {
     return (
       <React.Fragment>
         <form style={formStyle} method="post" onSubmit={this.onSubmit}>
-          <div className="form-group">
-            <input
-              onChange={this.handleFieldChange}
-              value={this.state.comment.name}
-              className="form-control"
-              placeholder="😎 Your Name"
-              name="name"
-              type="text"
-            />
-          </div>
 
           <div className="form-group">
             <textarea
@@ -122,17 +121,19 @@ export default class CommentForm extends Component {
               placeholder="🤬 Your Comment"
               name="message"
               rows="5"
+              required
             />
           </div>
 
           {this.renderError()}
 
           <div className="form-group">
-            <button disabled={this.state.loading} className="btn btn-primary">
-              Comment &#10148;
+            <button disabled={this.state.loading} className="add-deal-button">
+              Comment
             </button>
           </div>
         </form>
+        <NotificationContainer />
       </React.Fragment>
     );
   }

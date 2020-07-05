@@ -16,61 +16,27 @@ const ItemDetails = ({ match }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    window.scrollTo(0, 0)
     fetchData();
+    window.scrollTo(0, 0);
   }, []);
 
   function fetchData() {
-  //setinterval used for visual experience of loading spinner | not for use in real app
-  setInterval(()=>{
+
     Axios.get(`${url.API_URL}/deals/${match.params.id}`).then(
       (fetchItem) => {
-        setIsLoading(false);
+        console.log(fetchItem.data)
         setItem(fetchItem.data);
+        setIsLoading(false);
       }
-    );
-  }, 600)
+    ).catch((e)=>{
+      console.log(e);
+    });
   }
 
   const style = {
     paddingTop: "80px",
   };
-  const comments = {
-    comments: [
-      {
-        id: 1,
-        body:
-          "example comment 1  Saturna (z uwagi na pierścienie), poza tym Księżyc ziemski, bliższe planety i poza miastem galaktyki oraz inne obiekty nocnego nieba.",
-        author: "ddamis",
-        date: "2019-11-11T16:00:49.461Z",
-      },
-      {
-        id: 5,
-        body:
-          "sdfgsfdSaturna (z uwagi na pierścienie), poza tym Księżyc ziemski, bliższe planety i poza miastem galaktyki oraz inne obiekty nocnego nieba.",
-        author: "pola",
-        date: "2019-11-10T16:00:49.461Z",
-      },
-      {
-        id: 2,
-        body: "example comment 2",
-        author: "krysti",
-        date: "2019-11-11T16:10:49.461Z",
-      },
-      {
-        id: 3,
-        body: "example comment 3",
-        author: "jole",
-        date: "2019-11-11T16:22:49.461Z",
-      },
-      {
-        id: 4,
-        body: "example comment 4",
-        author: "ddamis",
-        date: "2019-11-11T16:00:49.461Z",
-      },
-    ],
-  };
+
   return (
     <Aux>
  { isLoading ? <div className="loader"></div> : 
@@ -115,10 +81,10 @@ const ItemDetails = ({ match }) => {
           </div>
         </div>
         <div className="row">
-          <CommentList comments={comments} />
+          <CommentList comments={item.comments} />
         </div>
         <div className="row">
-          <CommentForm />
+          <CommentForm itemId={item._id}/>
         </div>
       </div>}
     </Aux>
