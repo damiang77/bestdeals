@@ -1,20 +1,25 @@
 import React, { useContext, useEffect } from "react";
 import Aux from "../../hoc/Aux";
-import { NavLink, withRouter, Link } from "react-router-dom";
+import { NavLink, withRouter, Link, useHistory } from "react-router-dom";
 import { UserContext } from "../../containers/AppContext/UserContext";
 import { getJwt } from "../../helpers/jwt";
 import axios from "axios";
 import Logo from "../../assets/Logo.png";
 import { url } from "../../helpers/constants";
 
+
 const Toolbar = (props) => {
   const [user, setUser] = useContext(UserContext);
 
   useEffect(() => {
     getLogin();
+ 
   });
+  let history = useHistory();
+  
   const getLogin = () => {
     const jwt = getJwt();
+ 
     if (jwt) {
       axios
         .get(`${url.API_URL}/users/me`, {
@@ -24,8 +29,8 @@ const Toolbar = (props) => {
           setUser(res.data.email);
         })
         .catch((err) => {
-          // this.props.history.push('/login');
-          console.log(err);
+          localStorage.clear();
+          history.push("/");
         });
     }
   };

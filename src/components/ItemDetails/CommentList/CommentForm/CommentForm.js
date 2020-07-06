@@ -1,80 +1,49 @@
-import React, { Component } from "react";
-import {url} from "../../../../helpers/constants";
-import {getJwt} from "../../../../helpers/jwt";
+import React, { Component, useContext, useState } from "react";
+import { url } from "../../../../helpers/constants";
+import { getJwt } from "../../../../helpers/jwt";
 import Axios from "axios";
 import "react-notifications/lib/notifications.css";
 import {
   NotificationContainer,
-  NotificationManager
+  NotificationManager,
 } from "react-notifications";
+import { useHistory } from "react-router-dom";
+import { UserContext } from "../../../../containers/AppContext/UserContext";
 
-export default class CommentForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      error: "",
+const CommentForm = (props) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [comment, setComment] = useState("");
+  const [user, setUser] = useContext(UserContext);
 
-      comment: {
-        message: ""
-      }
-    };
-
-    // bind context to methods
-    this.handleFieldChange = this.handleFieldChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  /**
-   * Handle form input field changes & update the state
-   */
-  handleFieldChange = event => {
-    const { value, name } = event.target;
-
-    this.setState({
-      ...this.state,
-      comment: {
-        ...this.state.comment,
-        [name]: value
-      }
-    });
+  const handleFieldChange = (event) => {
+    setComment(event.target.value);
   };
 
- 
+  let history = useHistory();
 
-  /**
-   * Form submit handler
-   */
-  onSubmit(e) {
-    // prevent default form submission
+  const onSubmit = (e) => {
     e.preventDefault();
-
-    // loading status and clear error
-    this.setState({ error: "", loading: true });
-
     const jwt = getJwt();
     if (!jwt) {
-      this.props.history.push("/login");
+      history.push("/");
     }
-
     const config = {
       headers: {
-        "x-auth": jwt
-      }
+        "x-auth": jwt,
+      },
     };
-
-    var commentjson = {
-      "comment": this.state.comment.message
-    }
-
-    Axios.post(`${url.API_URL}/deals/${this.props.itemId}/comment`, commentjson, config)
-      .then(res => {
+    var commentJson = {
+      comment: comment,
+    };
+    Axios.post(
+      `${url.API_URL}/deals/${props.itemId}/comment`,
+      commentJson,
+      config
+    )
+      .then((res) => {
         if (res.status == 200) {
-          NotificationManager.success(
-            "Success",
-            "New comment added"
-          );
-       
+          NotificationManager.success("Success", "New comment added");
         } else {
           NotificationManager.warning(
             "Warning",
@@ -83,58 +52,50 @@ export default class CommentForm extends Component {
           );
         }
       })
-      .catch(err => {
-        NotificationManager.warning("Warning", "Failed to add new comment", 3000);
+      .catch((err) => {
+        NotificationManager.warning(
+          "Warning",
+          "Failed to add new comment",
+          3000
+        );
         console.log(err);
       });
-  }
+  };
 
-  /**
-   * Simple validation
-   */
-  isFormValid() {
-    return this.state.comment.name !== "" && this.state.comment.message !== "";
-  }
-
-  renderError() {
-    return this.state.error ? (
-      <div className="alert alert-danger">{this.state.error}</div>
+  const renderError = () => {
+    return error? (
+      <div className="alert alert-danger">{error}</div>
     ) : null;
   }
 
-  render() {
-    var formStyle = {
-      width: "500px",
-      marginLeft: "15px"
-    }
+  return (
+    user ? 
+    <React.Fragment>
+      <form method="post" className="comment-form" onSubmit={onSubmit}>
+        <div className="form-group">
+          <textarea
+            onChange={handleFieldChange}
+            value={comment}
+            className="form-control"
+            placeholder="🤬 Your Comment"
+            name="comment"
+            rows="5"
+            required
+          />
+        </div>
+   
+        {renderError()}
 
+        <div className="form-group">
+          <button disabled={loading} className="add-deal-button">
+            Comment
+          </button>
+        </div>
+      </form>
+      <NotificationContainer />
+    </React.Fragment>
+  : null
+  );
 
-    return (
-      <React.Fragment>
-        <form style={formStyle} method="post" onSubmit={this.onSubmit}>
-
-          <div className="form-group">
-            <textarea
-              onChange={this.handleFieldChange}
-              value={this.state.comment.message}
-              className="form-control"
-              placeholder="🤬 Your Comment"
-              name="message"
-              rows="5"
-              required
-            />
-          </div>
-
-          {this.renderError()}
-
-          <div className="form-group">
-            <button disabled={this.state.loading} className="add-deal-button">
-              Comment
-            </button>
-          </div>
-        </form>
-        <NotificationContainer />
-      </React.Fragment>
-    );
-  }
-}
+};
+export default CommentForm;

@@ -15,6 +15,7 @@ const ItemDetails = ({ match }) => {
   const [user, setUser] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
     fetchData();
     window.scrollTo(0, 0);
@@ -84,7 +85,7 @@ const ItemDetails = ({ match }) => {
           <CommentList comments={item.comments} />
         </div>
         <div className="row">
-          <CommentForm itemId={item._id}/>
+          <CommentForm itemId={item._id} />
         </div>
       </div>}
     </Aux>

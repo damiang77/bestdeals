@@ -10,7 +10,7 @@ const CommentList = (props) => {
           <h5 className="commentList__header">
           <img className="commentList__header__image" src={CommentImg}/>
           {" "}{props.comments.length}{" "}
-            Comment{props.comments.length > 0 ? "s" : ""}
+            Comment{props.comments.length > 1 ? "s" : ""}
           </h5>
     
           {props.comments.length === 0 ? (

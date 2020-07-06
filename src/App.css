@@ -622,6 +622,7 @@ span.small {
 .commentList {
   margin-top: 30px;
   padding: 15px;
+  width: 100%;
 }
 .commentList__header {
   padding-top: 10px;
@@ -773,4 +774,9 @@ span.small {
   color: red;
   padding: 0px;
   transition: all 0.3 ease;
+}
+
+.comment-form{
+  width: 100%;
+  padding:15px;
 }
