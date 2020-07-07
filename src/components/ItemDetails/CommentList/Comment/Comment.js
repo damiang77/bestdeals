@@ -4,12 +4,30 @@ import UserImg from "../../../../assets/user2.png";
 
 const Comment = (props) =>{
     const { userName, comment, date } = props.comment;
+
+    const comment_container = {
+      borderBottom: "1px solid #ececec",
+      paddingTop: "1rem",
+      paddingBottom: "1rem",
+      display: "flex",
+      alignItems: "flex-start"
+    }
+
+    const comment_image = {
+      marginTop: "12px",
+      width: "auto",
+      height: "auto",
+      maxWidth: "42px",
+      maxHeight: "42px"
+    }
+
     return (
-        <div className="media comment-container">
+        <div style={comment_container}>
           <img
-            className="mr-3 comment-image"
+            className="mr-3"
             width="48"
             height="48"
+            style={comment_image}
             src={UserImg}
             alt={userName}
           />

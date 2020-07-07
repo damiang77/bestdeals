@@ -14,12 +14,13 @@ const ItemDetails = ({ match }) => {
   const [item, setItem] = useState({});
   const [user, setUser] = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     fetchData();
     window.scrollTo(0, 0);
-  }, []);
+    setReload(false);
+  }, [reload]);
 
   function fetchData() {
 
@@ -37,6 +38,12 @@ const ItemDetails = ({ match }) => {
   const style = {
     paddingTop: "80px",
   };
+
+  function reloadItem(value){
+    setReload(value);
+  }
+
+
 
   return (
     <Aux>
@@ -82,10 +89,12 @@ const ItemDetails = ({ match }) => {
           </div>
         </div>
         <div className="row">
+
           <CommentList comments={item.comments} />
+         
         </div>
         <div className="row">
-          <CommentForm itemId={item._id} />
+          <CommentForm itemId={item._id} reload={reloadItem} />
         </div>
       </div>}
     </Aux>

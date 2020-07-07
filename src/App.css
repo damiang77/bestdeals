@@ -406,18 +406,8 @@ a:hover {
 .text-color-light {
   color: #9997a1;
 }
-.comment-container {
-  border-bottom: 1px solid #ececec;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-.comment-image {
-  margin-top: 12px;
-  width: auto;
-  height: auto;
-  max-width: 42px;
-  max-height: 42px;
-}
+
+
 .card-button {
   width: 100%;
   padding: 5px 10px 5px 10px;
@@ -619,17 +609,7 @@ span.small {
   max-width: 100%;
 }
 
-.commentList {
-  margin-top: 30px;
-  padding: 15px;
-  width: 100%;
-}
-.commentList__header {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  font-size: 16px;
-  color: black;
-}
+
 .commentList__header__image {
   width: 24px;
   height: auto;
@@ -778,5 +758,16 @@ span.small {
 
 .comment-form{
   width: 100%;
+
+}
+.comment-wrapper{
+  width: 100%;
   padding:15px;
+  background-color: #ecebeb;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  margin-bottom: 2rem;
+}
+.alert{
+  margin-bottom: 0 !important;
 }

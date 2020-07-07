@@ -7,7 +7,7 @@ import {
   NotificationContainer,
   NotificationManager,
 } from "react-notifications";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { UserContext } from "../../../../containers/AppContext/UserContext";
 
 const CommentForm = (props) => {
@@ -24,6 +24,9 @@ const CommentForm = (props) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    setComment("");
+    setError("");
     const jwt = getJwt();
     if (!jwt) {
       history.push("/");
@@ -44,12 +47,14 @@ const CommentForm = (props) => {
       .then((res) => {
         if (res.status == 200) {
           NotificationManager.success("Success", "New comment added");
+          handleReload();
         } else {
           NotificationManager.warning(
             "Warning",
             "Failed to add new comment",
             3000
           );
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -59,18 +64,22 @@ const CommentForm = (props) => {
           3000
         );
         console.log(err);
+        setLoading(false);
       });
   };
 
   const renderError = () => {
-    return error? (
-      <div className="alert alert-danger">{error}</div>
-    ) : null;
+    return error ? <div className="alert alert-danger">{error}</div> : null;
+  };
+
+  function handleReload() {
+    // Here, we invoke the callback with the new value
+    props.reload(true);
   }
 
   return (
-    user ? 
-    <React.Fragment>
+    <div className="comment-wrapper">
+      {user ? (
       <form method="post" className="comment-form" onSubmit={onSubmit}>
         <div className="form-group">
           <textarea
@@ -83,19 +92,21 @@ const CommentForm = (props) => {
             required
           />
         </div>
-   
         {renderError()}
-
         <div className="form-group">
           <button disabled={loading} className="add-deal-button">
             Comment
           </button>
         </div>
+        <NotificationContainer />
       </form>
-      <NotificationContainer />
-    </React.Fragment>
-  : null
-  );
 
+  ) : (
+    <div className="alert alert-danger" >
+      Please <Link to="/login">Sign in</Link> to comment.
+    </div>
+    )}
+    </div>
+  )
 };
 export default CommentForm;
