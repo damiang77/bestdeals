@@ -33,7 +33,7 @@ const Login = props => {
       var resdata = res.headers;
       localStorage.setItem("x-auth", resdata["x-auth"]);
       setUser(res.data.email);
-      props.history.push("/");
+      props.history.goBack();
       }).catch((err)=> {
         console.log(err)
         setError(true);
