@@ -1,12 +1,19 @@
-import React from 'react';
-import Aux from '../../hoc/Aux';
-import Toolbar from '../Toolbar/Toolbar';
-
+import React from "react";
+import Aux from "../../hoc/Aux";
+import Toolbar from "../Toolbar/Toolbar";
+import Footer from "../Footer/Footer";
+import {Helmet} from "react-helmet";
 
 const layout = (props) => (
-    <Aux>
-            <Toolbar email={props.email}/>
-    </Aux>
+  <Aux>
+      <Helmet>
+          <title>Best Deals!</title>
+          <meta name="description" content="The Best Deals from the Internet!"/>
+      </Helmet>
+    <Toolbar email={props.email} />
+    {props.children}
+    <Footer />
+  </Aux>
 );
-//render={(props) => <BestDeals email={props.email}/> }
+
 export default layout;

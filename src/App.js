@@ -11,7 +11,7 @@ import AuthenticatedComponent from './components/AuthenticatedComponent/Authenti
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import {AppProvider} from './containers/AppContext/AppContext';
 import {UserProvider} from './containers/AppContext/UserContext';
-import Footer from './components/Footer/Footer';
+
 
 class App extends Component{
   constructor(props){
@@ -27,7 +27,7 @@ class App extends Component{
         <AppProvider>
         <div className="App">
           <BrowserRouter>
-          <Layout/>
+          <Layout>
           <Route render={({location})=>(
             <TransitionGroup>
             <CSSTransition
@@ -46,7 +46,8 @@ class App extends Component{
             </CSSTransition>
             </TransitionGroup>
           )}/>
-                 <Footer/>
+          </Layout>
+                
           </BrowserRouter>
       </div>
       </AppProvider>
