@@ -13,25 +13,28 @@ import Helmet from "react-helmet";
 
 const ItemDetails = ({ match }) => {
   const [item, setItem] = useState({});
-  const [user, setUser] = useContext(UserContext);
+  const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
-    fetchData();
     window.scrollTo(0, 0);
+    fetchData();
     setReload(false);
+
+    return ()=>{
+      setHasError(false);
+    }
   }, [reload]);
 
   function fetchData() {
     Axios.get(`${url.API_URL}/deals/${match.params.id}`)
       .then((fetchItem) => {
-        console.log(fetchItem.data);
         setItem(fetchItem.data);
         setIsLoading(false);
       })
       .catch((e) => {
-        console.log(e);
+       setHasError(true);
       });
   }
 
@@ -39,8 +42,22 @@ const ItemDetails = ({ match }) => {
     paddingTop: "80px",
   };
 
+  const errorHeaderWrapper={
+    paddingTop: '100px',
+    paddingBottom: '50px',
+    textAlign: 'center',
+  }
+
   function reloadItem(value) {
     setReload(value);
+  }
+
+  if (hasError) {
+    return (
+      <div style={errorHeaderWrapper}>
+        <h4>Could not connect to server.</h4>
+      </div>
+    );
   }
 
   return (

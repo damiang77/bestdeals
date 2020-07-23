@@ -14,7 +14,6 @@ const Login = props => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [user, setUser] = useContext(UserContext);
-  const [deals, setDeals] = useContext(AppContext);
 
   const updateEmail = e => {
     setEmail(e.target.value);
