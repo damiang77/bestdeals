@@ -53,25 +53,6 @@ const NewDeal = props => {
     }
   };
 
-  /*
-const isFormValid = () =>{
-  const isValid = true;
-
-  if(link.indexOf("https://") === -1){
-    setLinkError(true);
-    isValid = false;
-  }
-  if(price.indexOf(",") >= 0){
-    setPriceError(true)
-    isValid = false;
-  }
-  if(oldPrice.indexOf(",") >= 0){
-    setOldPriceError(true)
-    isValid = false;
-  }
-  return isValid;
-}
-*/
   const checkFileSize = event => {
     let files = event.target.files;
     let size = 1500000;
@@ -130,11 +111,6 @@ const isFormValid = () =>{
     border-color: red;
   `;
   const submit = async e => {
-   /* const isValid = isFormValid();
-
-    if(isValid !== true){
-      return false;
-    }*/
 
     e.preventDefault();
     setIsLoading(true);
