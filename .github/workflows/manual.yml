@@ -27,7 +27,7 @@ jobs:
           do
             curl --request POST \
               --url "https://a9b9-82-160-106-103.eu.ngrok.io/api/webhook/synchronize-products?locale=$locale" \
-              --header "Authorization: pw3oM63waABhvrLGdT20ZYv5QNGSkIfIvmAU5d0NhNQG0M1iOIH1MnXZg7FXGUY" \
+              --header "Authorization: 8pw3oM63waABhvrLGdT20ZYv5QNGSkIfIvmAU5d0NhNQG0M1iOIH1MnXZg7FXGUY" \
               --fail \
               --silent \
               --show-error \
