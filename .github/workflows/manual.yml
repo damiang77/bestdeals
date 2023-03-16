@@ -27,6 +27,22 @@ jobs:
           do
             curl --request POST \
               --url "https://a9b9-82-160-106-103.eu.ngrok.io/api/webhook/synchronize-products?locale=$locale" \
-              --header "Authorization: Bearer 8pw3oM63waABhvrLGdT20ZYv5QNGSkIfIvmAU5d0NhNQG0M1iOIH1MnXZg7FXGUY"
+              --header "Authorization: pw3oM63waABhvrLGdT20ZYv5QNGSkIfIvmAU5d0NhNQG0M1iOIH1MnXZg7FXGUY" \
+              --fail \
+              --silent \
+              --show-error \
+              --output /dev/null \
+              --write-out "%{http_code}\n"
           done
-         
+        continue-on-error: true
+
+      - name: Set job status based on response code
+        if: ${{ steps.curl.outcome == 'success' }}
+        run: |
+          if [[ $(echo "${{ steps.curl.outputs['stdout'] }}" | grep -c '^200$') == 2 ]]; then
+            echo "All requests succeeded"
+            exit 0
+          else
+            echo "At least one request failed"
+            exit 1
+          fi
