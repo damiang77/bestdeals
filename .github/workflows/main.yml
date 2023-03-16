@@ -1,0 +1,16 @@
+name: daily-cron
+on:
+  schedule:
+    - cron: "10 13 * * *"
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call our API route
+        run: |
+            for locale in "en-US" "en-GB"
+            do
+              curl --request POST \
+                --url "https://a9b9-82-160-106-103.eu.ngrok.io/api/webhook/synchronize-products?locale=$locale" \
+                --header "Authorization: Bearer ${{ secrets.SYNCHRONIZE_PRODUCTS_SECRET }}"
+            done
