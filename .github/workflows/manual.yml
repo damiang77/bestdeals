@@ -25,6 +25,6 @@ jobs:
         run: |
           curl --request POST \
           --url 'https://a9b9-82-160-106-103.eu.ngrok.io/api/webhook/synchronize-products?locale=en-US' \
-          --header 'Authorization: Bearer ${{ secrets.SYNCHRONIZE_PRODUCTS_SECRET }}'
+          --header 'Authorization: Bearer 8pw3oM63waABhvrLGdT20ZYv5QNGSkIfIvmAU5d0NhNQG0M1iOIH1MnXZg7FXGUY'
 
          
