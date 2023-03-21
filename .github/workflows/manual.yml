@@ -21,28 +21,25 @@ jobs:
   cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Call our API route
-        run: |
+       - uses: actions/checkout@v2
+       - uses: actions/setup-node@v2
+         with:
+          node-version: "16"
+          cache: "npm"
+
+       - name: Install Vercel CLI
+         run: npm install --global vercel@latest
+
+       - name: Pull Vercel Environment Information
+         run: vercel env pull .env --yes --environment=master --token=${{ secrets.VERCEL_TOKEN }}
+       - name: LOG ENV
+         run: echo {{ env.SYNCHRONIZE_PRODUCTS_SECRET }}
+
+       - name: Call our API route
+         run: |
           for locale in "en-US" "en-GB"
           do
             curl --request POST \
-              --url "https://a9b9-82-160-106-103.eu.ngrok.io/api/webhook/synchronize-products?locale=$locale" \
-              --header "Authorization: Bearer 8pw3oM63waABhvrLGdT20ZYv5QNGSkIfIvmAU5d0NhNQG0M1iOIH1MnXZg7FXGUY" \
-              --fail \
-              --silent \
-              --show-error \
-              --output /dev/null \
-              --write-out "%{http_code}\n"
+              --url "https://clairol.com/api/webhook/synchronize-products?locale=$locale" \
+              --header "Authorization: Bearer ${{ env.SYNCHRONIZE_PRODUCTS_SECRET }}"
           done
-        continue-on-error: true
-
-      - name: Set job status based on response code
-        if: ${{ steps.curl.outcome == 'success' }}
-        run: |
-          if [[ $(echo "${{ steps.curl.outputs['stdout'] }}" | grep -c '^200$') == 2 ]]; then
-            echo "All requests succeeded"
-            exit 0
-          else
-            echo "At least one request failed"
-            exit 1
-          fi
