@@ -40,6 +40,6 @@ jobs:
           for locale in "en-US" "en-GB"
           do
             curl --request POST \
-              --url "https://clairol.com/api/webhook/synchronize-products?locale=$locale" \
+              --url "https://8f16-82-160-106-103.eu.ngrok.io/api/webhook/synchronize-products?locale=$locale" \
               --header "Authorization: Bearer ${{ env.SYNCHRONIZE_PRODUCTS_SECRET }}"
           done
